@@ -43,7 +43,7 @@ test: requirements .test
 	@echo
 	@echo "==================== flake8 ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	for py in $(PY_FILES); do \
 		echo "Checking $$py"; \
 		flake8 --config $(CI_DIR)/lint-configs/python/.flake8 $$py || exit 1; \
@@ -55,7 +55,7 @@ test: requirements .test
 	@echo
 	@echo "==================== pylint ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	for py in $(PY_FILES); do \
 		echo "Checking $$py"; \
 		python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc $py && echo "--> No pylint issues found in file: $$py." || exit 1; \
@@ -67,7 +67,7 @@ test: requirements .test
 	@echo
 	@echo "==================== json-lint ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	for json in $(JSON_FILES); do \
 		echo "Checking $$json"; \
 		python -mjson.tool $$json > /dev/null || exit 1; \
@@ -79,7 +79,7 @@ test: requirements .test
 	@echo
 	@echo "==================== yaml-lint ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	for yaml in $(YAML_FILES); do \
 		echo "Checking $$yaml"; \
 		python -c "import yaml; yaml.safe_load(open('$$yaml', 'r'))" || exit 1; \
@@ -91,7 +91,7 @@ test: requirements .test
 	@echo
 	@echo "==================== test ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
 		nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1; \
 	else \
@@ -104,7 +104,7 @@ requirements: virtualenv
 	@echo
 	@echo "==================== requirements ===================="
 	@echo
-	@. $(VIRTUALENV_DIR)/bin/activate; \
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	$(VIRTUALENV_DIR)/bin/pip install --upgrade pip; \
 	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(CI_DIR)/requirements-dev.txt -r $(CI_DIR)/requirements-test.txt;
 
@@ -115,7 +115,7 @@ $(VIRTUALENV_DIR)/bin/activate:
 	@echo
 	@echo "==================== virtualenv ===================="
 	@echo
-	@test -d $(VIRTUALENV_DIR) || virtualenv --no-site-packages $(VIRTUALENV_DIR)
+	test -d $(VIRTUALENV_DIR) || virtualenv --no-site-packages $(VIRTUALENV_DIR)
 
 
 .PHONY: .clean-virtualenv
