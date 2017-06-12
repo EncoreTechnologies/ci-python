@@ -48,7 +48,9 @@ test: requirements .test
 	@echo "==================== pylint ===================="
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
-	find ${PYMODULE_DIR} -name 'ci' -prune -or -name '.git' -prune -or -name "*.py" -print0 | xargs -0 -n 1 python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc && echo	 "--> No pylint issues found in actions." || exit 1;
+	for py in $(PY_FILES); do \
+		python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc && echo "--> No pylint issues found in module." || exit 1; \
+	done
 
 
 .PHONY: .configs-check
