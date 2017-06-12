@@ -20,13 +20,19 @@ all: requirements lint test
 clean: .clean-virtualenv
 
 .PHONY: lint
-lint: requirements flake8 pylint configs-check metadata-check
+lint: requirements flake8 pylint json-lint yaml-lint
 
 .PHONY: flake8
 flake8: requirements .flake8
 
 .PHONY: pylint
 pylint: requirements .pylint
+
+.PHONY: json-lint
+pylint: requirements .json-lint
+
+.PHONY: yaml-lint
+pylint: requirements .yaml-lint
 
 .PHONY: test
 test: requirements .test
@@ -53,25 +59,25 @@ test: requirements .test
 	done
 
 
-.PHONY: .configs-check
-.configs-check:
+.PHONY: .json-lint
+.json-lint:
 	@echo
-	@echo "==================== configs-check ===================="
+	@echo "==================== json-lint ===================="
+	@echo
+	. $(VIRTUALENV_DIR)/bin/activate; \
+	for json in $(JSON_FILES); do \
+		python -mjson.tool $$json > /dev/null || exit 1; \
+	done
+
+.PHONY: .yaml-lint
+.yaml-lint:
+	@echo
+	@echo "==================== yaml-lint ===================="
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	for yaml in $(YAML_FILES); do \
-		st2-check-validate-yaml-file $$yaml || exit 1; \
+		python -c "import yaml; yaml.safe_load(open('$$yaml', 'r'))" || exit 1; \
 	done
-	. $(VIRTUALENV_DIR)/bin/activate; \
-	for json in $(JSON_FILES); do \
-		st2-check-validate-json-file $$json || exit 1; \
-	done
-	@echo
-	@echo "==================== example config check ===================="
-	@echo
-	. $(VIRTUALENV_DIR)/bin/activate; \
-	st2-check-validate-pack-example-config /tmp/packs/$(PACK_NAME) || exit 1;
-
 
 .PHONY: .test
 .test:
