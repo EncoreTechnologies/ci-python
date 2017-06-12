@@ -43,8 +43,9 @@ test: requirements .test
 	@echo
 	@echo "==================== flake8 ===================="
 	@echo
-	. $(VIRTUALENV_DIR)/bin/activate; \
+	@. $(VIRTUALENV_DIR)/bin/activate; \
 	for py in $(PY_FILES); do \
+		echo "Checking $$py"; \
 		flake8 --config $(CI_DIR)/lint-configs/python/.flake8 $$py || exit 1; \
 	done
 
@@ -56,6 +57,7 @@ test: requirements .test
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	for py in $(PY_FILES); do \
+		echo "Checking $$py"; \
 		python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc $py && echo "--> No pylint issues found in file: $$py." || exit 1; \
 	done
 
@@ -67,6 +69,7 @@ test: requirements .test
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	for json in $(JSON_FILES); do \
+		echo "Checking $$json"; \
 		python -mjson.tool $$json > /dev/null || exit 1; \
 	done
 
@@ -78,6 +81,7 @@ test: requirements .test
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	for yaml in $(YAML_FILES); do \
+		echo "Checking $$yaml"; \
 		python -c "import yaml; yaml.safe_load(open('$$yaml', 'r'))" || exit 1; \
 	done
 
