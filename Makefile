@@ -88,7 +88,7 @@ test: requirements .test
 	@echo "==================== test ===================="
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
-	nosetests -s -v --exe $(PYMODULE_TESTS_DIR) -x -p $(PYMODULE_DIR) || exit 1;
+	nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1;
 
 
 .PHONY: requirements
