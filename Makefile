@@ -6,7 +6,7 @@
 # =============================================
 
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-PYMODULE_DIR := $(ROOT_DIR)/../
+PYMODULE_DIR := $(ROOT_DIR)/..
 PYMODULE_TESTS_DIR ?= $(PYMODULE_DIR)/tests
 CI_DIR ?= $(ROOT_DIR)
 YAML_FILES := $(shell git ls-files '*.yaml' '*.yml')
