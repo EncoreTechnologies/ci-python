@@ -7,6 +7,7 @@
 
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PYMODULE_DIR := $(ROOT_DIR)/../
+PYMODULE_TESTS_DIR ?= $(PYMODULE_DIR)/tests
 CI_DIR ?= $(ROOT_DIR)
 YAML_FILES := $(shell git ls-files '*.yaml' '*.yml')
 JSON_FILES := $(shell git ls-files '*.json')
@@ -69,6 +70,7 @@ test: requirements .test
 		python -mjson.tool $$json > /dev/null || exit 1; \
 	done
 
+
 .PHONY: .yaml-lint
 .yaml-lint:
 	@echo
@@ -79,13 +81,14 @@ test: requirements .test
 		python -c "import yaml; yaml.safe_load(open('$$yaml', 'r'))" || exit 1; \
 	done
 
+
 .PHONY: .test
 .test:
 	@echo
 	@echo "==================== test ===================="
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
-	$(ST2_REPO_PATH)/st2common/bin/st2-run-pack-tests -x -p $(PACK_DIR) || exit 1;
+	nosetests -s -v --exe $(PYMODULE_TESTS_DIR) -x -p $(PYMODULE_DIR) || exit 1;
 
 
 .PHONY: requirements
