@@ -88,7 +88,11 @@ test: requirements .test
 	@echo "==================== test ===================="
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
-	nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1;
+	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
+		nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1; \
+	else \
+		@echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
+	fi;
 
 
 .PHONY: requirements
