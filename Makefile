@@ -1,7 +1,7 @@
 ################################################################################
 # Description:
 #  Executes testing and validation for python code and configuration files
-#  within a StackStorm pack.
+#  within a Python Module.
 #
 # =============================================
 
