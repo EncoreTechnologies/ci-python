@@ -49,7 +49,7 @@ test: requirements .test
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	for py in $(PY_FILES); do \
-		python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc && echo "--> No pylint issues found in module." || exit 1; \
+		python -m pylint -E --rcfile=$(CI_DIR)/lint-configs/python/.pylintrc $py && echo "--> No pylint issues found in module." || exit 1; \
 	done
 
 
