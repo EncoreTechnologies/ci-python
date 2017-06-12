@@ -91,7 +91,7 @@ test: requirements .test
 	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
 		nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1; \
 	else \
-		@echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
+		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
 	fi;
 
 
