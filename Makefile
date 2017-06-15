@@ -94,6 +94,7 @@ test: requirements .test
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
 		export PYTHONPATH="$(PYMODULE_DIR):$(PYTHONPATH)"; \
+		echo $PYTHONPATH; \
 		nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1; \
 	else \
 		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
