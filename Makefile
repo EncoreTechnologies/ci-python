@@ -106,7 +106,7 @@ requirements: virtualenv
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	$(VIRTUALENV_DIR)/bin/pip install --upgrade pip; \
-	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(CI_DIR)/requirements-dev.txt -r $(CI_DIR)/requirements-test.txt;
+	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(PYMODULE_DIR)/requirements.txt -r $(CI_DIR)/requirements-dev.txt -r $(CI_DIR)/requirements-test.txt;
 
 
 .PHONY: virtualenv
