@@ -17,7 +17,7 @@ VIRTUALENV_DIR ?= $(ROOT_DIR)/virtualenv
 TEST_COVERAGE_DIR ?= $(ROOT_DIR)/cover
 
 .PHONY: all
-all: requirements lint test
+all: requirements lint test test-coveralls
 
 .PHONY: clean
 clean: .clean-virtualenv .clean-test-coverage
@@ -42,6 +42,9 @@ test: requirements .test
 
 .PHONY: test-coverage-html
 test-coverage-html: requirements .test-coverage-html
+
+.PHONY: test-coveralls
+test-coveralls: requirements .test-coveralls
 
 .PHONY: clean-test-coverage
 clean-test-coverage: .clean-test-coverage
@@ -125,12 +128,25 @@ list:
 	fi;
 
 
+.PHONY: .test-coveralls
+.test-coveralls:
+	@echo
+	@echo "==================== test-coveralls ===================="
+	@echo
+	if [ ! -z "$$COVERALLS_REPO_TOKEN" ]; then \
+		coveralls; \
+	else \
+		echo "$COVERALLS_REPO_TOKEN is not set! Not submitting coverage to coveralls.io.";
+	fi;
+
+
 .PHONY: .clean-test-coverage
 .clean-test-coverage:
 	@echo
 	@echo "==================== clean-test-coverage ===================="
 	@echo
 	rm -rf $(TEST_COVERAGE_DIR)
+	rm -f $(PYMODULE_DIR)/.coverage
 
 
 .PHONY: requirements
