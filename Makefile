@@ -8,6 +8,7 @@
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PYMODULE_DIR := $(ROOT_DIR)/..
 PYMODULE_TESTS_DIR ?= $(PYMODULE_DIR)/tests
+PYMODULE_NAME ?= $(shell python $(PYMODULE_DIR)/setup.py --name )
 CI_DIR ?= $(ROOT_DIR)
 YAML_FILES := $(shell git ls-files '*.yaml' '*.yml')
 JSON_FILES := $(shell git ls-files '*.json')
@@ -37,6 +38,9 @@ pylint: requirements .yaml-lint
 
 .PHONY: test
 test: requirements .test
+
+.PHONY: test-coverage-html
+test-coverage-html: requirements .test-coverage-html
 
 .PHONY: .flake8
 .flake8:
@@ -93,13 +97,22 @@ test: requirements .test
 	@echo
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
-		export PYTHONPATH="$(PYMODULE_DIR):$(PYTHONPATH)"; \
-		echo $$PYTHONPATH; \
-		nosetests -s -v --exe $(PYMODULE_TESTS_DIR) || exit 1; \
+		nosetests -s -v --with-coverage --cover-inclusive --cover-erase --cover-package=$(PYMODULE_NAME)  --exe $(PYMODULE_TESTS_DIR) || exit 1; \
 	else \
 		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
 	fi;
 
+.PHONY: .test-coverage-html
+.test-coverage-html:
+	@echo
+	@echo "==================== test-coverage-html ===================="
+	@echo
+	. $(VIRTUALENV_DIR)/bin/activate; \
+	if [ -d "$(PYMODULE_TESTS_DIR)" ]; then \
+		nosetests -s -v --with-coverage --cover-inclusive --cover-erase --cover-package=$(PYMODULE_NAME) --cover-html --exe $(PYMODULE_TESTS_DIR) || exit 1; \
+	else \
+		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
+	fi;
 
 .PHONY: requirements
 requirements: virtualenv
