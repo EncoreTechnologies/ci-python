@@ -136,7 +136,7 @@ list:
 	if [ ! -z "$$COVERALLS_REPO_TOKEN" ]; then \
 		coveralls; \
 	else \
-		echo "\$COVERALLS_REPO_TOKEN is not set! Not submitting coverage to coveralls.io."; \
+		echo "COVERALLS_REPO_TOKEN env variable is not set! Skipping test coverage submission to coveralls.io."; \
 	fi;
 
 
