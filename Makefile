@@ -133,6 +133,7 @@ list:
 	@echo
 	@echo "==================== test-coveralls ===================="
 	@echo
+	. $(VIRTUALENV_DIR)/bin/activate; \
 	if [ ! -z "$$COVERALLS_REPO_TOKEN" ]; then \
 		coveralls; \
 	else \
