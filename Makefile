@@ -14,12 +14,13 @@ YAML_FILES := $(shell git ls-files '*.yaml' '*.yml')
 JSON_FILES := $(shell git ls-files '*.json')
 PY_FILES   := $(shell git ls-files '*.py')
 VIRTUALENV_DIR ?= $(ROOT_DIR)/virtualenv
+TEST_COVERAGE_DIR ?= $(ROOT_DIR)/cover
 
 .PHONY: all
 all: requirements lint test
 
 .PHONY: clean
-clean: .clean-virtualenv
+clean: .clean-virtualenv .clean-test-coverage
 
 .PHONY: lint
 lint: requirements flake8 pylint json-lint yaml-lint
@@ -41,6 +42,14 @@ test: requirements .test
 
 .PHONY: test-coverage-html
 test-coverage-html: requirements .test-coverage-html
+
+.PHONY: clean-test-coverage
+clean-test-coverage: .clean-test-coverage
+
+# list all makefile targets
+.PHONY: list
+list:
+	@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
 
 .PHONY: .flake8
 .flake8:
@@ -102,6 +111,7 @@ test-coverage-html: requirements .test-coverage-html
 		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
 	fi;
 
+
 .PHONY: .test-coverage-html
 .test-coverage-html:
 	@echo
@@ -113,6 +123,15 @@ test-coverage-html: requirements .test-coverage-html
 	else \
 		echo "Tests directory not found: $(PYMODULE_TESTS_DIR)";\
 	fi;
+
+
+.PHONY: .clean-test-coverage
+.clean-test-coverage:
+	@echo
+	@echo "==================== clean-test-coverage ===================="
+	@echo
+	rm -rf $(TEST_COVERAGE_DIR)
+
 
 .PHONY: requirements
 requirements: virtualenv
