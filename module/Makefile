@@ -8,14 +8,7 @@ export PYMODULE_NAME := $(shell python setup.py --name)
 all: .DEFAULT
 
 .PHONY: clean
-clean: clean-pyc clean-ci-repo
-
-.PHONY: clean-pyc
-clean-pyc:
-	@echo
-	@echo "==================== clean-pyc ===================="
-	@echo
-	find . -name 'ci' -prune -or -name '.git' -or -type f -name "*.pyc" -print | xargs rm
+clean: clean-ci-repo clean-pyc
 
 # Clone the ci-repo into the ci/ directory
 .PHONY: clone-ci-repo
@@ -41,6 +34,14 @@ clean-ci-repo:
 		make -f $(ROOT_DIR)/ci/Makefile clean; \
 	fi;
 	rm -rf $(CI_REPO_PATH)
+
+# Clean *.pyc files.
+.PHONY: clean-pyc
+clean-pyc:
+	@echo
+	@echo "==================== clean-pyc ===================="
+	@echo
+	find $(ROOT_DIR) -name 'ci' -prune -or -name '.git' -or -type f -name "*.pyc" -print | xargs rm
 
 # list all makefile targets
 .PHONY: list
