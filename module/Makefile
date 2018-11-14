@@ -20,7 +20,7 @@ clone-ci-repo:
 		git clone https://github.com/EncoreTechnologies/ci-python.git --depth 1 --single-branch --branch $(CI_REPO_BRANCH) $(CI_REPO_PATH); \
 	else \
 		cd $(CI_REPO_PATH); \
-		git pull;
+		git pull; \
 	fi;
 
 # Clean the ci-repo (calling `make clean` in that directory), then remove the
